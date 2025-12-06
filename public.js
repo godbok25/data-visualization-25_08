@@ -172,4 +172,6 @@ function initBubbleChart() {
 }
 
 // 페이지 로드 시 공공데이터 버블 차트 초기화
-window.addEventListener("load", initBubbleChart);
+window.addEventListener("load", () => {
+    initBubbleChart();   // 섹션2 버블
+});

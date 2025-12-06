@@ -52,7 +52,8 @@ fetch("trends_merged.json")
   .then((json) => {
     const groups = json.groups || [];
     if (!groups.length) return;
-
+    // 👇 인사이트 섹션에서 쓰게 전역에 저장
+    window.trendGroups = groups;
     // 대표 키워드: 각 그룹의 첫 번째 시리즈 사용
     const labels = groups[0].series[0].data.map((p) => p.date);
 
