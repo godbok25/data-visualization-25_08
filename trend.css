@@ -133,12 +133,16 @@
     /* Section Styles */
     section.page-section {
         min-height: 100vh;
-        padding-top: 40px;
-        /* Space for visual separation */
-        padding-bottom: 60px;
-        scroll-margin-top: 80px;
-        /* Offset for fixed GNB */
-        border-bottom: 1px solid var(--border-subtle);
+        /* 화면 높이 기준 */
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        /* 위에서부터 시작하도록 변경 */
+        padding: 40px 0;
+        scroll-snap-align: start;
+        /* 스크롤 스냅 포인트 */
+        scroll-margin-top: 50px;
+        /* 🔥 GNB와의 간격 (여기 숫자가 핵심) */
     }
 
     section.page-section:last-child {
