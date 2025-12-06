@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <title>문화유산 리디자인 트렌드 데이터 시각화</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="trend.css">
+</head>
+<body>
+  <nav class="gnb">
+    <div class="gnb-inner">
+      <ul class="gnb-menu">
+        <li><a href="#section1" class="active">트렌드 데이터</a></li>
+        <li><a href="#section2">공공 데이터</a></li>
+        <li><a href="#section4">분석 인사이트</a></li>
+        <span class="gnb-indicator"></span>
+      </ul>
+      <div class="toggle-pill" aria-label="색상 테마 전환">
+        <button id="themeDark" class="is-active">Dark</button>
+        <button id="themeLight">Light</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="page-shell">
+    <section id="section1" class="page-section">
+      <div class="header-row">
+        <div>
+          <h1>문화유산 리디자인 트렌드 데이터 시각화</h1>
+          <p class="subtitle">
+            국립중앙박물관 굿즈, 전통 소재(자개·민화·단청·전통문양·고려청자), 그리고 KCDF·국가유산진흥원 등 주요 기관
+            키워드를 Google Trends로 분석해, 감성소비 시대의 문화유산 리디자인 흐름을 한눈에 보여준다.
+          </p>
+        </div>
+      </div>
+
+      <div class="chip-row">
+        <div class="chip"><strong>기간</strong> · 대한민국 · 최근 5년 · 웹 검색</div>
+        <div class="chip"><strong>데이터 출처</strong> · Google Trends</div>
+        <div class="chip"><strong>비교 축</strong> · A 굿즈/상품 · B 전통소재 · C 기관/플랫폼</div>
+      </div>
+
+      <div class="layout">
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <div class="panel-kicker">종합 비교</div>
+              <div class="panel-title">A·B·C 그룹 관심도 추이</div>
+            </div>
+            <div class="group-toggle-row">
+              <label><input type="checkbox" id="toggleA" checked />A 그룹</label>
+              <label><input type="checkbox" id="toggleB" checked />B 그룹</label>
+              <label><input type="checkbox" id="toggleC" checked />C 그룹</label>
+            </div>
+          </div>
+          <div class="chart-shell"><canvas id="trendChart"></canvas></div>
+          <div class="chart-meta-row">
+            <div class="legend-inline" id="legendInline"></div>
+            <div>단위: 검색 관심도(0–100)</div>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section id="section2" class="page-section">
+      <div class="placeholder-content"><h2>공공 데이터</h2></div>
+    </section>
+    <section id="section4" class="page-section">
+      <div class="placeholder-content"><h2>분석 인사이트</h2></div>
+    </section>
+  </div>
+  <script src="trend.js" defer></script>
+</body>
+</html>
