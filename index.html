@@ -10,8 +10,8 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link rel="stylesheet" href="trend.css">
-  <link rel="stylesheet" href="public.css">
+  <link rel="stylesheet" href="./trend.css">
+  <link rel="stylesheet" href="./public.css">
 </head>
 
 <body>
@@ -22,8 +22,8 @@
       <ul class="gnb-menu">
         <li><a href="#section1" class="active">트렌드 데이터</a></li>
         <li><a href="#section2">공공 데이터</a></li>
-        <!-- <li><a href="#section3">리디자인 사례</a></li> -->
-        <li><a href="#section4">분석 인사이트</a></li>
+        <li><a href="#section3">분석 인사이트</a></li>
+        <!-- <li><a href="#section4">리디자인 사례</a></li> -->
         <!-- <li><a href="#section5">결론 · 제언</a></li> -->
       </ul>
 
@@ -193,22 +193,96 @@
         <span>시각화: Chart.js · Bubble Chart</span>
       </footer>
     </section>
-
-    <!-- SECTION 3: 시각화 자료 -->
-    <!-- <section id="section3" class="page-section">
-      <div class="placeholder-content">
-        <h2>시각화 자료</h2>
-        <p>추가 시각화 자료가 들어갈 자리입니다.</p>
+    <!-- SECTION 3: 분석 인사이트 -->
+    <section id="section3" class="page-section">
+      <div class="header-row">
+        <div>
+          <h1>분석 인사이트</h1>
+          <p class="subtitle">
+            Google Trends 트렌드 데이터와 공공데이터(판매지수·관심지수)를 함께 시각화한 결과,
+            전통소재 기반 문화유산 리디자인 상품은 최근 5년 동안 꾸준히 성장하는 흐름을 보였다.
+            특히 자개·민화·단청·전통문양 등 전통 시각 요소는 검색 관심도뿐 아니라 실제 상품 판매와
+            인기관심도에서 동시에 높은 값을 기록하며, 감성소비 시대에 경쟁력 있는 문화유산 리디자인
+            소재로 작동하고 있다.
+          </p>
+        </div>
       </div>
-    </section> -->
 
-    <!-- SECTION 4: 분석 인사이트 -->
-    <section id="section4" class="page-section">
-      <div class="placeholder-content">
-        <h2>분석 인사이트</h2>
-        <p>데이터 분석을 통한 인사이트 내용이 들어갈 자리입니다.</p>
+      <div class="layout">
+        <!-- LEFT: 종합 인사이트 레이더 차트 -->
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <div class="panel-kicker">종합 잠재력 비교</div>
+              <div class="panel-title">전통소재별 리디자인 잠재력 레이더 차트</div>
+              <div class="panel-sub">
+                공공데이터 버블 차트에 사용된 실제 수치를 기반으로,
+                자개·민화·전통문양·생활공예·전통회화 계열 상품의
+                판매지수·관심지수·리디자인 강도를 종합 비교한다.
+              </div>
+            </div>
+          </div>
+          <div class="chart-shell">
+            <canvas id="insightRadar"></canvas>
+          </div>
+          <div class="chart-meta-row">
+            <div>축: 판매지수 · 관심지수 · 리디자인 강도 (0–100)</div>
+          </div>
+        </section>
+
+        <!-- RIGHT: 인사이트 카드 -->
+        <section class="panel">
+          <div class="cards">
+            <article class="mini-card">
+              <div>
+                <div class="kicker">인사이트 ①</div>
+                <h3>트렌드 관점: 전통소재 관심의 우상향</h3>
+                <p>
+                  Google Trends 분석에서 자개·민화·단청·전통문양 등 전통소재 키워드는
+                  최근 5년간 전반적으로 우상향하는 관심도를 보인다.
+                  이는 전통문화가 일회성 유행이 아니라, 감성소비와 취향 기반 소비 속에서
+                  꾸준히 탐색되는 주제임을 보여준다.
+                </p>
+              </div>
+            </article>
+
+            <article class="mini-card">
+              <div>
+                <div class="kicker">인사이트 ②</div>
+                <h3>공공데이터 관점: 자개·민화 계열의 높은 성과</h3>
+                <p>
+                  공공데이터 버블 차트에서 자개 텀블러, 민화 머그컵, 전통문양·전통회화 기반 굿즈는
+                  판매지수와 관심지수가 모두 상위권에 위치한다.
+                  단순 복원형 상품보다, 전통미를 생활소품과 결합한 리디자인 제품이
+                  실제 시장 반응을 더 강하게 이끌어내고 있음을 보여준다.
+                </p>
+              </div>
+            </article>
+
+            <article class="mini-card">
+              <div>
+                <div class="kicker">인사이트 ③</div>
+                <h3>종합 해석: 감성 UX 기반 리디자인의 전략적 가치</h3>
+                <p>
+                  트렌드 데이터의 관심도 상승과 공공데이터의 판매·관심 지표는 서로를 보완하며,
+                  전통소재 리디자인이 문화·정체성 표현을 넘어
+                  실제 비즈니스 측면에서도 의미 있는 성과를 낼 수 있음을 시사한다.
+                  앞으로의 문화유산 리디자인은 전통의 상징성과 이야기,
+                  그리고 감성 UX를 결합한 데이터 기반 기획 전략이 핵심이 될 것이다.
+                </p>
+              </div>
+            </article>
+          </div>
+        </section>
       </div>
     </section>
+    <!-- SECTION 4: 리디자인 사례 -->
+    <!-- <section id="section4" class="page-section">
+      <div class="placeholder-content">
+        <h2>리디자인 사례</h2>
+        <p>추가 리디자인 사례가 들어갈 자리입니다.</p>
+      </div>
+    </section> -->
 
     <!-- SECTION 5: 결론 · 제언 -->
     <!-- <section id="section5" class="page-section">
@@ -222,6 +296,7 @@
 
   <script src="trend.js"></script>
   <script src="public.js"></script>
+  <script src="insight.js"></script>
 </body>
 
 </html>
