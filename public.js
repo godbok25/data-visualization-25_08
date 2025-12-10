@@ -12,7 +12,7 @@ const bubbleItems = [
     { label: "백자 달항아리 오브제", category: "도자/백자", salesScore: 60, interestScore: 72 },
     { label: "복식 패턴 스카프", category: "전통복식/문양", salesScore: 78, interestScore: 91 },
     { label: "전통 문살 액자", category: "건축/목공예", salesScore: 72, interestScore: 84 },
-    { label: "한지 엽서 세트", category: "기타", salesScore: 55, interestScore: 65 },
+    { label: "한지 엽서 세트", category: "한지", salesScore: 55, interestScore: 65 },
     { label: "문양형 굿즈", category: "전통문양", salesScore: 75, interestScore: 80 },
     { label: "생활소품 리디자인", category: "생활공예", salesScore: 88, interestScore: 75 },
     { label: "전통회화 포스터", category: "전통회화", salesScore: 82, interestScore: 87 },
@@ -33,7 +33,7 @@ const categoryColors = {
     "도자/백자": "rgba(231, 201, 141, 0.75)", // 웜베이지
     "전통복식/문양": "rgba(246, 162, 98, 0.78)", // 밝고 따뜻한 주황톤
     "건축/목공예": "rgba(183, 138, 125, 0.75)", // 모카브라운
-    "기타": "rgba(176, 210, 240, 0.75)",     // 연하늘색
+    "한지": "rgba(176, 210, 240, 0.75)",     // 연하늘색
 
     // ✨ 새로 추가된 카테고리
     "전통문양": "rgba(195, 179, 255, 0.75)", // 연보라톤
@@ -52,7 +52,7 @@ function buildBubbleDatasets(items) {
 
     // 2) 각 아이템을 카테고리별로 묶으면서 반지름 스케일링
     items.forEach((item) => {
-        const cat = item.category || "기타";
+        const cat = item.category || "한지";
         if (!grouped[cat]) grouped[cat] = [];
 
         // 0~1 사이로 정규화한 후 10~48px 사이로 스케일
@@ -72,7 +72,7 @@ function buildBubbleDatasets(items) {
     return Object.keys(grouped).map((cat) => ({
         label: cat,
         data: grouped[cat],
-        backgroundColor: categoryColors[cat] || categoryColors["기타"],
+        backgroundColor: categoryColors[cat] || categoryColors["한지"],
         borderColor: "rgba(255, 255, 255, 0.95)",
         borderWidth: 2,
         hoverBorderWidth: 3,
@@ -85,14 +85,14 @@ function buildLegendBubble(id, items) {
     if (!el) return;
     el.innerHTML = "";
 
-    const cats = [...new Set(items.map((i) => i.category || "기타"))];
+    const cats = [...new Set(items.map((i) => i.category || "한지"))];
     cats.forEach((cat) => {
         const wrap = document.createElement("div");
         wrap.className = "legend-item";
 
         const sw = document.createElement("span");
         sw.className = "legend-swatch";
-        sw.style.background = categoryColors[cat] || categoryColors["기타"];
+        sw.style.background = categoryColors[cat] || categoryColors["한지"];
 
         const text = document.createElement("span");
         text.textContent = cat;
