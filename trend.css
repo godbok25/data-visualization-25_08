@@ -46,6 +46,15 @@
         box-sizing: border-box;
     }
 
+    html,
+    body {
+        font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+        font-weight: 400;
+        color: #e5e7eb;
+        /* 기본 폰트 컬러 유지 */
+        line-height: 1.6;
+    }
+
     html {
         scroll-behavior: smooth;
     }
@@ -55,7 +64,7 @@
         min-height: 100vh;
         font-family: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
         background: radial-gradient(circle at top left, rgba(213, 237, 247, 18%), transparent 55%),
-            radial-gradient(circle at bottom right, rgba(139, 92, 246, 0.16), transparent 55%),
+            radial-gradient(circle at bottom right, rgba(139, 120, 246, 0.1), transparent 55%),
             var(--bg);
         color: var(--text-main);
         -webkit-font-smoothing: antialiased;
@@ -130,6 +139,121 @@
         padding: 0 18px;
     }
 
+    /* BURGER & CLOSE BUTTONS (Default Hidden) */
+    .gnb-burger {
+        display: none;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 5px;
+        flex-direction: column;
+        gap: 5px;
+        z-index: 1100;
+    }
+
+    .burger-bar {
+        width: 24px;
+        height: 2px;
+        background-color: var(--text-main);
+        display: block;
+        transition: 0.3s;
+    }
+
+    /* 닫기 버튼 기본 스타일 (공통) */
+    .gnb-close {
+        background: transparent;
+        border: none;
+        color: var(--text-main);
+        font-size: 34px;
+        cursor: pointer;
+        position: absolute;
+        top: 15px;
+        left: 20px;
+        z-index: 1200;
+
+        transform: scale(0.6);
+        opacity: 0;
+        pointer-events: none;
+        transition: transform 0.25s ease-out, opacity 0.2s ease-out;
+    }
+
+    .gnb-menu.active .gnb-close {
+        transform: scale(1);
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .gnb-menu li {
+        position: relative;
+        padding: 12px 0;
+        /* 하얀색 반투명 라인 */
+        padding: 12px 0;
+    }
+
+    .gnb-menu li:last-child {
+        border-bottom: none;
+        /* 마지막 항목엔 라인 제거 */
+    }
+
+    .gnb-menu a {
+        color: var(--text-main);
+        text-decoration: none;
+        display: block;
+        padding: 8px 0;
+        transition: color 0.2s ease;
+    }
+
+    .gnb-menu a:hover {
+        color: var(--color-accent);
+        /* hover 시 강조색 */
+    }
+
+    /* 구분선 대신 가상요소로 높이 조정 */
+    .gnb-menu li a::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: var(--accent);
+        border-radius: 2px;
+        transition: width 0.4s ease;
+    }
+
+    /* hover 시 indicator bar가 왼쪽에서 오른쪽으로 채워지도록 */
+    .gnb-menu li a:hover::after,
+    .gnb-menu li a.active::after {
+        width: 100%;
+    }
+
+    .gnb-menu li:last-child::after {
+        display: none;
+        /* 마지막 라인 제거 */
+    }
+
+    #section1 {
+        position: relative;
+        height: calc(100vh - 80px);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+    }
+
+    #section1 .credit {
+        position: absolute;
+        bottom: 80px;
+        /* 섹션 아래에서의 거리 */
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 13px;
+        color: #94a3b8;
+        text-align: center;
+        margin: 0;
+    }
+
     /* Section Styles */
     section.page-section {
         min-height: 100vh;
@@ -161,9 +285,34 @@
     }
 
     .placeholder-content h2 {
-        font-size: 32px;
-        margin-bottom: 16px;
+        font-family: 'Noto Serif KR', serif;
+        font-weight: 400 !important;
+        letter-spacing: -0.05em !important;
+        font-size: 2.8rem;
+        letter-spacing: -0.02em;
+        line-height: 1.3;
+        text-align: center;
+        margin-bottom: 1.2rem;
         color: var(--text-main);
+    }
+
+    :root[data-theme="dark"] .placeholder-content h2 {
+        color: #d4dced;
+    }
+
+    .placeholder-content p {
+        font-size: 16px;
+        margin-bottom: 8px;
+        font-weight: 500;
+    }
+
+    .subtitle {
+        margin: 0;
+        font-size: 14px !important;
+        font-weight: 300 !important;
+        color: var(--text-soft);
+        max-width: 750px;
+        line-height: 1.5;
     }
 
     .header-row {
@@ -178,14 +327,6 @@
         font-size: 24px;
         letter-spacing: -0.04em;
         margin: 0 0 12px;
-    }
-
-    .subtitle {
-        margin: 0;
-        font-size: 13px;
-        color: var(--text-soft);
-        max-width: 580px;
-        line-height: 1.5;
     }
 
     .chip-row {
@@ -251,11 +392,10 @@
     }
 
     .panel-kicker {
-        font-size: 11px;
+        font-size: 12px;
         color: var(--accent);
         font-weight: 500;
         text-transform: uppercase;
-        letter-spacing: 0.12em;
         margin-bottom: 4px;
     }
 
@@ -432,11 +572,10 @@
     }
 
     .mini-card .kicker {
-        font-size: 10px;
+        font-size: 11px;
         color: var(--accent);
         margin-bottom: 2px;
         text-transform: uppercase;
-        letter-spacing: 0.12em;
         font-weight: 500;
     }
 
@@ -497,10 +636,83 @@
         white-space: nowrap;
     }
 
+    /* 사이트 전체 하단 Footer (GNB와 폭 맞춤, 화면 끝까지 배경) */
+    .site-footer {
+        width: 100%;
+        background: rgba(2, 6, 23, 0.96);
+        border-top: 1px solid rgba(56, 189, 248, 0.12);
+        color: rgba(148, 163, 184, 0.85);
+        font-family: "Pretendard", sans-serif;
+        font-size: 0.85rem;
+        letter-spacing: 0.2px;
+        box-sizing: border-box;
+        padding: 16px 0;
+    }
+
+    /* 내부 정렬 – GNB와 동일한 폭으로 가운데 정렬 */
+    .site-footer-inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 40px;
+        text-align: left;
+        white-space: nowrap;
+    }
+
+    /* 라이트 모드 */
+    :root[data-theme="light"] .site-footer {
+        background: rgba(248, 250, 252, 0.98);
+        border-top: 1px solid rgba(148, 163, 184, 0.2);
+        color: rgba(71, 85, 105, 0.9);
+    }
+
     @media (max-width: 900px) {
         body {
             padding: 20px 14px 24px;
             padding-top: 70px;
+        }
+
+        /* MOBILE MENU STYLES */
+        .gnb-burger {
+            display: flex;
+        }
+
+        .gnb-menu {
+            position: fixed;
+            top: 0;
+            left: -100%;
+            /* Hidden by default */
+            width: 70%;
+            max-width: 300px;
+            height: 100vh;
+            background: var(--bg-elevated);
+            box-shadow: 5px 0 30px rgba(0, 0, 0, 0.5);
+            flex-direction: column;
+            justify-content: flex-start;
+            padding: 80px 20px;
+            /* 위쪽 여백: 닫기 버튼 자리 */
+            transition: left 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 1050;
+            backdrop-filter: none;
+        }
+
+        .gnb-menu.active {
+            left: 0;
+            /* 슬라이드 인 */
+        }
+
+        /* 모바일에서만 닫기 버튼 보이도록 렌더링 */
+        .gnb-close {
+            display: block;
+        }
+
+        /* 메뉴 열렸을 때: 회전 + 보이기 */
+        .gnb-menu.active .gnb-close {
+            transform: rotate(0deg);
+            /* 0도로 회전 */
+            opacity: 1;
+            /* 서서히 나타남 */
+            pointer-events: auto;
+            /* 클릭 가능 */
         }
 
         .layout {
@@ -543,5 +755,213 @@
 
         .gnb-menu li a {
             font-size: 12px;
+        }
+
+        /* Responsive H2 Size (approx 85% of 2.6rem) */
+        .placeholder-content h2 {
+            font-size: 2.1rem;
+        }
+
+        /* Mobile Background Size */
+        #section1::before {
+            background-size: 75% auto;
+            /* Increased by 50% relative to original 50% (or just larger for mobile) */
+        }
+    }
+
+    /* Section 1 Background */
+    #section1 {
+        height: calc(100vh - 70px);
+        /* Subtract body padding-top */
+        min-height: auto;
+        /* Override default min-height */
+        overflow: hidden;
+        /* Prevent scroll */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        /* Center content vertically */
+        position: relative;
+        /* For pseudo-element positioning */
+        z-index: 1;
+        /* Ensure content is above */
+    }
+
+    #section1::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: url('./img/bg_section1.png');
+        background-position: center bottom 140px;
+        /* Total 120px as requested */
+        background-repeat: no-repeat;
+        background-size: 28% auto;
+        /* Reduced size by 10% more (50% -> 40%) */
+        opacity: 0.65;
+        /* 30% transparency */
+        z-index: -1;
+        pointer-events: none;
+    }
+
+    /* Ensure content inside section1 takes full height for centering if needed, 
+       but placeholder-content has fixed height. Let's override it for section1. */
+    #section1 .placeholder-content {
+        height: 100%;
+        justify-content: flex-start;
+        /* Align top so title isn't too low, or center? User said "below title" for bg. */
+        padding-top: 5vh;
+        /* Give some space from top */
+    }
+
+    /* 901~1100px 사이 화면에서 약간 확대 (중간 화면 보완) */
+    @media (max-width: 1100px) and (min-width: 901px) {
+        #section1::before {
+            background-size: 32% auto;
+            background-position: center bottom 140px;
+        }
+    }
+
+    /* 769~900px 구간에서 비율 조금 줄이기 (답답하지 않게) */
+    @media (max-width: 900px) and (min-width: 769px) {
+        #section1::before {
+            background-size: 35% auto;
+            background-position: center bottom 130px;
+        }
+    }
+
+    /* 모바일 */
+    @media (max-width: 768px) {
+
+        /* 궁궐 이미지 */
+        #section1::before {
+            background-size: 60% auto;
+            background-position: center bottom 140px;
+        }
+
+        /* 타이틀 크기 줄이기 */
+        #section1 .hero-title {
+            font-size: 1.8rem;
+            line-height: 1.3;
+        }
+
+        /* 부제목 */
+        #section1 .subtitle {
+            font-size: 0.95rem;
+            margin-top: 10px;
+            margin-bottom: 8px;
+        }
+
+        /* 본문 설명 */
+        #section1 .desc {
+            font-size: 0.85rem;
+            line-height: 1.6;
+            max-width: 80%;
+            margin: 0 auto 20px;
+        }
+
+        /* 이름 부분 – 한 줄 고정 */
+        #section1 .credit {
+            bottom: 50px;
+            font-size: 0.75rem;
+            /* 살짝 더 줄이기 */
+            line-height: 1.4;
+            white-space: nowrap;
+            /* 🔹줄바꿈 금지 */
+            text-align: center;
+        }
+    }
+
+    /* ===== TOP 버튼 – 세련된 라운드 & 납작한 화살표 ===== */
+    #topButton {
+        position: fixed;
+        bottom: 28px;
+        right: 50px;
+
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        background: rgba(15, 23, 42, 0.95);
+        border: 1px solid rgba(56, 189, 248, 0.35);
+        color: var(--accent);
+        cursor: pointer;
+        backdrop-filter: blur(6px);
+
+        box-shadow: 0 6px 14px rgba(15, 23, 42, 0.75);
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(8px);
+        transition: all 0.25s ease;
+        z-index: 1100;
+    }
+
+    /* 표시될 때 */
+    #topButton.show {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    /* hover 시 살짝 상승 + 강조 */
+    #topButton:hover {
+        background: rgba(15, 23, 42, 1);
+        border-color: var(--accent-strong);
+        color: var(--accent-strong);
+        box-shadow: 0 8px 18px rgba(15, 23, 42, 0.9);
+        transform: translateY(-2px);
+    }
+
+    /* 라이트 모드 대응 */
+    :root[data-theme="light"] #topButton {
+        background: rgba(248, 250, 252, 0.96);
+        border-color: rgba(148, 163, 184, 0.4);
+        box-shadow: 0 4px 10px rgba(148, 163, 184, 0.45);
+        color: #2563eb;
+    }
+
+    /* ===== 화살표 아이콘 (∧) ===== */
+    .arrow-up {
+        --arrow-scale: 1.5;
+        /* 🔹크기 조정 (0.8~1.3 사이 추천) */
+        position: relative;
+        width: 16px;
+        height: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* 화살표 선(∧ 형태) */
+    .arrow-up::before {
+        content: "";
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        border-left: 2px solid currentColor;
+        /* 🔹3px → 2px 로 변경 */
+        border-top: 2px solid currentColor;
+        /* 🔹동일하게 줄이기 */
+        transform-origin: center;
+        transform: translateY(2px) rotate(45deg) scale(var(--arrow-scale));
+    }
+
+    /* ===== 모바일 대응 ===== */
+    @media (max-width: 768px) {
+        #topButton {
+            bottom: 20px;
+            right: 20px;
+            width: 48px;
+            height: 48px;
+        }
+
+        .arrow-up {
+            --arrow-scale: 1.1;
+            /* 살짝 작게 */
         }
     }

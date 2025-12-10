@@ -1,86 +1,131 @@
-/* SECTION 3 레이아웃 살짝 넓게 */
-#section3 .insight-layout {
-    align-items: stretch;
-}
-
-/* 레이더 차트 영역: 정사각형 + 둥근 느낌 */
-#section3 .insight-chart-row {
+/* ============================
+   SECTION 4: 분석 인사이트
+============================ */
+/* #section4 .insight-layout {
     display: flex;
+    align-items: stretch;
     gap: 24px;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 12px;
-}
+} */
 
-#section3 .radar-shell {
-    flex: 1.4;
+#section4 .radar-shell {
     position: relative;
+    width: 100%;
     max-width: 520px;
-    aspect-ratio: 1 / 1;
+    aspect-ratio: 1/1;
     margin: 0 auto;
-    border-radius: 999px;
-    padding: 18px;
-    background:
-        radial-gradient(circle at 30% 20%, rgba(94, 234, 212, 0.16), transparent 60%),
-        radial-gradient(circle at 70% 80%, rgba(129, 140, 248, 0.22), transparent 60%),
-        rgba(15, 23, 42, 0.95);
-    box-shadow:
-        0 0 0 1px rgba(148, 163, 184, 0.35),
-        0 18px 45px rgba(15, 23, 42, 0.9);
+    background: transparent;
 }
 
-#insightRadar {
+#section4 #insightRadar {
     width: 100% !important;
     height: 100% !important;
 }
 
-/* 커스텀 범례 */
-#section3 .radar-legend {
-    flex: 1;
+#section4 .chart-meta-row {
+    margin-top: 10px;
+    font-size: 12px;
+    color: rgba(148, 163, 184, 0.95);
+    text-align: left;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    font-size: 13px;
-}
-
-#section3 .radar-legend-title {
-    font-size: 12px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: rgba(148, 163, 184, 0.9);
-    margin-bottom: 4px;
-}
-
-#section3 .radar-legend-item {
-    display: flex;
     align-items: flex-start;
+    /* flex 아이템 왼쪽 정렬 */
+    gap: 4px;
+}
+
+html[data-theme="dark"] #section4 .chart-meta-row {
+    color: #E2E8F0;
+}
+
+/* ✅ pill 스타일 (section1과 동일하게 hover 효과 추가) */
+#section4 .radar-toggle-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 8px;
-    padding: 6px 8px;
-    border-radius: 10px;
-    background: rgba(15, 23, 42, 0.9);
-    border: 1px solid rgba(30, 64, 175, 0.6);
+    margin-top: 14px;
 }
 
-#section3 .radar-legend-swatch {
-    width: 14px;
-    height: 14px;
+#section4 .radar-toggle input {
+    /* display: none; */
+    width: 13px;
+    height: 13px;
+    accent-color: #38bdf8;
+    margin: 0;
+    cursor: pointer;
+}
+
+#section4 .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
     border-radius: 999px;
-    border: 1px solid rgba(15, 23, 42, 0.9);
-    flex-shrink: 0;
+    border: 1px solid rgba(148, 163, 184, 0.5);
+    background: rgba(15, 23, 42, 0.9);
+    color: rgba(226, 232, 240, 0.96);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
 
-#section3 .radar-legend-label {
-    font-weight: 600;
-    color: rgba(226, 232, 240, 0.98);
+#section4 .pill:hover {
+    border-color: rgba(96, 165, 250, 0.9);
+    box-shadow: 0 0 8px rgba(96, 165, 250, 0.4);
+    color: #fff;
+    transform: translateY(-1px);
 }
 
-#section3 .radar-legend-desc {
+/* ✅ 색상표 (chart와 매칭) */
+.swatch {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+    margin-right: 6px;
+    vertical-align: middle;
+}
+
+.swatch-a {
+    background: rgba(255, 182, 193, 0.9);
+}
+
+/* 트렌드 A */
+.swatch-b {
+    background: rgba(255, 195, 99, 0.9);
+}
+
+/* 트렌드 B */
+.swatch-c {
+    background: rgba(200, 162, 255, 0.9);
+}
+
+/* 트렌드 C */
+.swatch-public {
+    background: rgba(173, 216, 230, 0.9);
+}
+
+/* 공공데이터 */
+.swatch-public {
+    background: rgba(94, 127, 160, 0.9);
+}
+
+/* 공공데이터 - 블루그레이 */
+
+/* 종합 잠재력 */
+.swatch-total {
+    background: rgba(110, 142, 130, 0.9);
+}
+
+/* 종합잠재력 - 민트그린 */
+
+
+/* 카드 */
+/* 카드 스타일은 trend.css 상속받되, Section 4에서는 썸네일 제거하고 텍스트를 꽉 채움 */
+#section4 .mini-card {
+    grid-template-columns: 1fr;
+    /* 썸네일 컬럼 제거 */
     display: block;
-    font-size: 11px;
-    color: rgba(148, 163, 184, 0.95);
-}
-
-/* 카드랑 높이 균형 맞추기 위해 패널 기본 높이 조금 늘리기(선택) */
-#section3 .panel .cards {
-    gap: 10px;
+    /* 또는 block으로 변경하여 꽉 채움 */
+    gap: 0;
 }

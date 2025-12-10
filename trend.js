@@ -17,6 +17,50 @@ function setTheme(mode) {
 btnDark.addEventListener("click", () => setTheme("dark"));
 btnLight.addEventListener("click", () => setTheme("light"));
 
+// =======================
+// MOBILE GNB SLIDE MENU
+// =======================
+const burgerBtn = document.querySelector(".gnb-burger");
+const gnbMenu = document.getElementById("gnbMenu");
+const closeBtn = document.querySelector(".gnb-close");
+
+function openMenu() {
+  gnbMenu.classList.add("active");
+
+  // 햄버거 버튼 천천히 사라지기
+  burgerBtn.style.transition = "opacity 0.25s ease";
+  burgerBtn.style.opacity = "0";
+
+  // 약간의 딜레이 후 숨기기 (자연스러운 타이밍)
+  setTimeout(() => {
+    burgerBtn.style.visibility = "hidden";
+    document.body.style.overflow = "hidden";
+  }, 250);
+}
+
+function closeMenu() {
+  gnbMenu.classList.remove("active");
+
+  // 햄버거 버튼 다시 천천히 등장
+  burgerBtn.style.visibility = "visible";
+  burgerBtn.style.transition = "opacity 0.25s ease";
+  burgerBtn.style.opacity = "1";
+
+  document.body.style.overflow = "";
+}
+// 햄버거 버튼 클릭 시
+burgerBtn?.addEventListener("click", openMenu);
+// 닫기 버튼 클릭 시
+closeBtn?.addEventListener("click", closeMenu);
+// 메뉴 항목 클릭 시 자동 닫기
+document.querySelectorAll(".gnb-menu li a").forEach((link) => {
+  link.addEventListener("click", closeMenu);
+});
+// 창 크기 조정 시 (데스크탑 전환 시 자동 닫기)
+window.addEventListener("resize", () => {
+  if (window.innerWidth > 900) closeMenu();
+});
+////////////////////
 // GROUP TOGGLES
 const toggleA = document.getElementById("toggleA");
 const toggleB = document.getElementById("toggleB");
@@ -47,7 +91,7 @@ function buildLegend(datasets) {
   });
 }
 
-fetch("trends_merged.json")
+fetch("./trends_merged.json")
   .then((res) => res.json())
   .then((json) => {
     const groups = json.groups || [];
@@ -148,25 +192,79 @@ fetch("trends_merged.json")
     console.error("데이터 로드 오류:", err);
   });
 
-// Active Menu Highlight on Scroll
-const sections = document.querySelectorAll("section.page-section");
-const navLi = document.querySelectorAll(".gnb-menu li a");
+// =======================
+// GNB active + scroll 연동
+// =======================
 
+// 1) 섹션 / 네비 링크 가져오기
+const sections = document.querySelectorAll("section.page-section");
+const navLinks = document.querySelectorAll(".gnb-menu li a");
+
+// 2) 메뉴 클릭(터치) 시:
+//    - active 클래스 갱신
+//    - 모바일(<=900px)이면 슬라이드 메뉴 닫기
+navLinks.forEach((link) => {
+  link.addEventListener(
+    "click",
+    () => {
+      // 모든 메뉴에서 active 제거
+      navLinks.forEach((l) => l.classList.remove("active"));
+      // 클릭한 메뉴에 active 부여
+      link.classList.add("active");
+
+      // 모바일에서만 슬라이드 닫기
+      if (window.innerWidth <= 900 && typeof closeMenu === "function") {
+        closeMenu();
+      }
+    },
+    { passive: true }
+  );
+});
+
+// 3) 스크롤 위치에 따라 active 자동 업데이트
 window.addEventListener("scroll", () => {
-  let current = "";
+  let currentId = "";
+
   sections.forEach((section) => {
     const sectionTop = section.offsetTop;
     const sectionHeight = section.clientHeight;
-    // Offset for fixed header
-    if (scrollY >= sectionTop - 150) {
-      current = section.getAttribute("id");
+
+    if (window.scrollY >= sectionTop - 150) {
+      currentId = section.id;
     }
   });
 
-  navLi.forEach((a) => {
-    a.classList.remove("active");
-    if (a.getAttribute("href").includes(current)) {
-      a.classList.add("active");
-    }
+  if (!currentId) return;
+
+  navLinks.forEach((link) => {
+    const href = link.getAttribute("href") || "";
+    const isMatch = href.includes(currentId);
+    link.classList.toggle("active", isMatch);
+  });
+});
+
+// 4) 창 크기 조정 시 (데스크톱 전환되면 슬라이드 강제 닫기)
+window.addEventListener("resize", () => {
+  if (window.innerWidth > 900 && typeof closeMenu === "function") {
+    closeMenu();
+  }
+});
+// =======================
+// TOP BUTTON
+// =======================
+const topButton = document.getElementById("topButton");
+
+window.addEventListener("scroll", () => {
+  if (window.scrollY > 300) {
+    topButton.classList.add("show");
+  } else {
+    topButton.classList.remove("show");
+  }
+});
+
+topButton.addEventListener("click", () => {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
   });
 });

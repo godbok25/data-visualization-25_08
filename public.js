@@ -109,7 +109,18 @@ function initBubbleChart() {
     const ctx = canvas.getContext("2d");
     const datasets = buildBubbleDatasets(bubbleItems);
 
-    new Chart(ctx, {
+    // 테마별 색상 반환 함수 (insight.js와 동일 로직)
+    const getThemeColors = () => {
+        const isDark = document.documentElement.getAttribute("data-theme") !== "light";
+        return {
+            grid: isDark ? "rgba(148, 163, 184, 0.25)" : "rgba(148, 163, 184, 0.25)",
+            text: isDark ? "#E2E8F0" : "rgba(148, 163, 184, 0.95)", // 레이더 차트 글자색과 동일하게 맞춤
+        };
+    };
+
+    let themeColors = getThemeColors();
+
+    const chart = new Chart(ctx, {
         type: "bubble",
         data: { datasets },
         options: {
@@ -131,7 +142,6 @@ function initBubbleChart() {
                                 raw._label,
                                 `판매지수: ${raw.x}`,
                                 `관심지수: ${raw.y}`,
-                                // `리디자인 강도: ${raw._redesign}`,
                             ];
                         },
                     },
@@ -139,28 +149,38 @@ function initBubbleChart() {
             },
             scales: {
                 x: {
-                    title: { display: true, text: "판매지수 (0–100)" },
+                    title: {
+                        display: true,
+                        text: "판매지수 (0–100)",
+                        color: themeColors.text, // 테마 색상 적용
+                        font: { size: 13, weight: 600 }
+                    },
                     min: 40,
                     max: 95,
                     grid: {
-                        color: "rgba(148,163,184,0.25)",
+                        color: themeColors.grid, // 테마 색상 적용
                         lineWidth: 1,
                     },
                     ticks: {
-                        color: "rgba(148,163,184,0.95)",
+                        color: themeColors.text, // 테마 색상 적용
                         font: { size: 11, weight: "500" },
                     },
                 },
                 y: {
-                    title: { display: true, text: "관심지수 (0–100)" },
+                    title: {
+                        display: true,
+                        text: "관심지수 (0–100)",
+                        color: themeColors.text, // 테마 색상 적용
+                        font: { size: 13, weight: 600 }
+                    },
                     min: 60,
                     max: 100,
                     grid: {
-                        color: "rgba(148,163,184,0.25)",
+                        color: themeColors.grid, // 테마 색상 적용
                         lineWidth: 1,
                     },
                     ticks: {
-                        color: "rgba(148,163,184,0.95)",
+                        color: themeColors.text, // 테마 색상 적용
                         font: { size: 11, weight: "500" },
                     },
                 },
@@ -169,6 +189,30 @@ function initBubbleChart() {
     });
 
     buildLegendBubble("legendBubble", bubbleItems);
+
+    // ------------------------------------
+    // 테마 변경 감지 (Dark/Light) - insight.js와 동일한 방식
+    // ------------------------------------
+    const observer = new MutationObserver(() => {
+        const newColors = getThemeColors();
+
+        // X축 업데이트
+        chart.options.scales.x.title.color = newColors.text;
+        chart.options.scales.x.grid.color = newColors.grid;
+        chart.options.scales.x.ticks.color = newColors.text;
+
+        // Y축 업데이트
+        chart.options.scales.y.title.color = newColors.text;
+        chart.options.scales.y.grid.color = newColors.grid;
+        chart.options.scales.y.ticks.color = newColors.text;
+
+        chart.update();
+    });
+
+    observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ["data-theme"]
+    });
 }
 
 // 페이지 로드 시 공공데이터 버블 차트 초기화

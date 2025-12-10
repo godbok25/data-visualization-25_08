@@ -3,28 +3,23 @@
    ================================ */
 
 /* 공공데이터 섹션 전체 여백 */
-#section2 .layout {
+#section3 .layout {
     margin: 32px 0;
     margin-top: 0;
 }
 
 /* 그래프 하단 여백 최소화 */
-#section2 canvas {
+#section3 canvas {
     margin-bottom: 0 !important;
     padding-bottom: 0 !important;
 }
 
 /* 그래프 설명글(출처, 단위 등) 간격 조정 */
-#section2 p {
+#section3 p {
     margin-top: 6px !important;
     /* 트렌드 분석 섹션처럼 딱 붙게 */
 }
 
-/* 그래프 wrapper 여백 조정 (필요 시) */
-#section2 .layout {
-    margin-bottom: 0 !important;
-    padding-bottom: 0 !important;
-}
 
 /* 버블 차트 캔버스 높이 고정 (세로 간격 확보) */
 #chartBubble {

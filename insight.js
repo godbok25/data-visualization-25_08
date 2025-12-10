@@ -1,114 +1,81 @@
 // =========================
-// SECTION 3: 트렌드 + 공공데이터 통합 레이더
+// SECTION 4: 분석 인사이트
 // =========================
 
-// 레이더 축으로 쓸 전통 소재 5개
 const RADAR_AXES = [
-    { id: "자개", trendKeyword: "자개 굿즈", category: "자개" },
-    { id: "민화", trendKeyword: "민화 굿즈", category: "민화" },
-    { id: "전통문양", trendKeyword: "전통문양 굿즈", category: "전통문양" },
-    { id: "생활공예", trendKeyword: "생활공예 굿즈", category: "생활공예" },
-    { id: "전통회화", trendKeyword: "전통회화 굿즈", category: "전통회화" },
+    "관심도", "지속 가능성", "인지도", "접근성", "시장성", "리디자인 적용도"
 ];
 
-// Google Trends groups 구조에서 특정 키워드의 평균 관심도(0~100) 구하기
-function getTrendAverage(groups, keyword) {
-    if (!groups) return 0;
-    for (const g of groups) {
-        for (const s of g.series) {
-            if (s.keyword === keyword) {
-                const values = s.data.map((p) => p.value);
-                const sum = values.reduce((a, b) => a + b, 0);
-                return sum / values.length;
-            }
-        }
-    }
-    return 0;
-}
-
-// 공공데이터(bubbleItems)에서 카테고리별 판매·관심 평균 구하기
-function getPublicScore(category) {
-    const items = (window.bubbleItems || []).filter(
-        (it) => it.category === category
-    );
-    if (!items.length) return 0;
-
-    const sum = items.reduce(
-        (acc, it) => acc + (it.salesScore + it.interestScore) / 2,
-        0
-    );
-    return sum / items.length;
-}
-
-// 레이더에 쓸 labels + datasets 만들기
-function buildRadarData(groups) {
-    const labels = RADAR_AXES.map((a) => a.id);
-    const trendScores = [];
-    const publicScores = [];
-    const combinedScores = [];
-
-    RADAR_AXES.forEach((axis) => {
-        const t = getTrendAverage(groups, axis.trendKeyword);   // 0~100
-        const p = getPublicScore(axis.category);                // 0~100
-        const c = (t + p) / 2;
-
-        trendScores.push(Math.round(t * 10) / 10);
-        publicScores.push(Math.round(p * 10) / 10);
-        combinedScores.push(Math.round(c * 10) / 10);
-    });
-
-    return { labels, trendScores, publicScores, combinedScores };
-}
-
-function initInsightRadarCombined() {
-    const canvas = document.getElementById("insightRadar");
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-
-    // trend.js에서 먼저 세팅해 둔 전역 groups 사용
-    const groups = window.trendGroups || null;
-    if (!groups) {
-        console.warn("trendGroups가 아직 없습니다. trends_merged.json 로딩 확인 필요");
-        return;
+const radarDataSets = [
+    {
+        label: "트렌드 A그룹",
+        data: [75, 84, 52, 45, 70, 80],
+        borderColor: "rgba(255, 182, 193, 0.9)",      // 핑크
+        backgroundColor: "rgba(255, 182, 193, 0.35)",
+        fill: true,
+        borderWidth: 2,
+        pointBackgroundColor: "rgba(255, 182, 193, 0.9)"
+    },
+    {
+        label: "트렌드 B그룹",
+        data: [88, 68, 85, 35, 90, 70],
+        borderColor: "rgba(255, 195, 99, 0.9)",       // 🎨 노랑-오렌지 (새 톤)
+        backgroundColor: "rgba(255, 195, 99, 0.32)",
+        fill: true,
+        borderWidth: 2,
+        pointBackgroundColor: "rgba(255, 195, 99, 0.9)"
+    },
+    {
+        label: "트렌드 C그룹",
+        data: [68, 74, 50, 40, 72, 85],
+        borderColor: "rgba(200, 162, 255, 0.9)",      // 라벤더
+        backgroundColor: "rgba(200, 162, 255, 0.35)",
+        fill: true,
+        borderWidth: 2,
+        pointBackgroundColor: "rgba(200, 162, 255, 0.9)"
+    },
+    {
+        label: "공공데이터 (판매·관심)",
+        data: [70, 72, 60, 35, 74, 76],
+        borderColor: "rgba(94, 127, 160, 0.95)",     // 🩵 그레이시 블루
+        backgroundColor: "rgba(94, 127, 160, 0.30)",
+        fill: true,
+        borderWidth: 2,
+        pointBackgroundColor: "rgba(94, 127, 160, 0.95)"
+    },
+    {
+        label: "종합 리디자인 잠재력",
+        data: [78, 78, 65, 39, 81, 79],
+        borderColor: "rgba(110, 142, 130, 0.95)",     // 💚 그린 민트
+        backgroundColor: "rgba(110, 142, 130, 0.30)",
+        fill: true,
+        borderWidth: 2,
+        pointBackgroundColor: "rgba(110, 142, 130, 0.95)"
     }
 
-    const { labels, trendScores, publicScores, combinedScores } =
-        buildRadarData(groups);
+];
 
-    new Chart(ctx, {
+
+function initInsightRadar() {
+    const ctx = document.getElementById("insightRadar");
+    if (!ctx) return;
+
+    // 테마별 색상 반환 함수
+    const getThemeColors = () => {
+        // html 태그의 data-theme 속성 확인
+        const isDark = document.documentElement.getAttribute("data-theme") !== "light";
+        return {
+            // 다크모드일 때 / 라이트모드일 때 그리드 및 텍스트 색상
+            grid: isDark ? "rgba(148, 163, 184, 0.25)" : "rgba(148, 163, 184, 0.25)", // Light mode grid matches Section 3
+            text: isDark ? "#E2E8F0" : "rgba(148, 163, 184, 0.95)", // Light mode text matches Section 3
+        };
+    };
+
+    let themeColors = getThemeColors();
+
+    const chart = new Chart(ctx, {
         type: "radar",
-        data: {
-            labels,
-            datasets: [
-                {
-                    label: "트렌드 관심도",
-                    data: trendScores,
-                    borderColor: "rgba(239, 68, 68, 0.9)",
-                    backgroundColor: "rgba(239, 68, 68, 0.20)",
-                    borderWidth: 2,
-                    pointRadius: 3,
-                    pointBackgroundColor: "rgba(239, 68, 68, 1)",
-                },
-                {
-                    label: "공공데이터 지수",
-                    data: publicScores,
-                    borderColor: "rgba(59, 130, 246, 0.9)",
-                    backgroundColor: "rgba(59, 130, 246, 0.20)",
-                    borderWidth: 2,
-                    pointRadius: 3,
-                    pointBackgroundColor: "rgba(59, 130, 246, 1)",
-                },
-                {
-                    label: "종합 리디자인 잠재력",
-                    data: combinedScores,
-                    borderColor: "rgba(16, 185, 129, 0.9)",
-                    backgroundColor: "rgba(16, 185, 129, 0.20)",
-                    borderWidth: 2,
-                    pointRadius: 3,
-                    pointBackgroundColor: "rgba(16, 185, 129, 1)",
-                },
-            ],
-        },
+        data: { labels: RADAR_AXES, datasets: radarDataSets },
         options: {
             responsive: true,
             maintainAspectRatio: false,
@@ -116,40 +83,55 @@ function initInsightRadarCombined() {
                 r: {
                     min: 0,
                     max: 100,
+                    grid: { circular: true, color: themeColors.grid },
+                    angleLines: { display: true, color: themeColors.grid }, // ✅ 중심에서 뻗어나가는 선 추가
+                    pointLabels: { color: themeColors.text, font: { size: 13, weight: 600 } },
                     ticks: {
-                        stepSize: 20,
-                        color: "rgba(148, 163, 184, 0.9)",
-                        backdropColor: "transparent",
-                    },
-                    grid: {
-                        color: "rgba(148, 163, 184, 0.25)",
-                    },
-                    angleLines: {
-                        color: "rgba(148, 163, 184, 0.25)",
-                    },
-                    pointLabels: {
-                        color: "rgba(226, 232, 240, 0.98)",
-                        font: { size: 12 },
-                    },
+                        backdropColor: 'transparent',
+                        color: themeColors.text,
+                        font: { weight: 'normal' },
+                        callback: function (value) {
+                            return '      ' + value; // 숫자 앞에 공백을 더 주어 오른쪽으로 더 밀어냄
+                        }
+                    }
                 },
             },
-            plugins: {
-                legend: {
-                    position: "top",
-                    labels: {
-                        color: "rgba(226, 232, 240, 0.98)",
-                        boxWidth: 18,
-                    },
-                },
-                tooltip: {
-                    callbacks: {
-                        label: (ctx) => `${ctx.dataset.label}: ${ctx.formattedValue}`,
-                    },
-                },
-            },
+            plugins: { legend: { display: false } }, // 기본 범례 숨김
         },
+    });
+
+    // ------------------------------------
+    // 체크박스 제어
+    // ------------------------------------
+    ["A", "B", "C", "Public", "Total"].forEach((key, i) => {
+        // toggleTrendA, toggleTrendB ... 등 ID 매칭
+        const el = document.getElementById(`toggleTrend${key}`) || document.getElementById(`toggle${key}`);
+        if (el) {
+            el.addEventListener("change", () => {
+                chart.setDatasetVisibility(i, el.checked);
+                chart.update();
+            });
+        }
+    });
+
+    // ------------------------------------
+    // 테마 변경 감지 (Dark/Light)
+    // ------------------------------------
+    const observer = new MutationObserver(() => {
+        const newColors = getThemeColors();
+        // 차트 옵션 업데이트
+        chart.options.scales.r.grid.color = newColors.grid;
+        chart.options.scales.r.angleLines.color = newColors.grid; // ✅ 각도 선 색상 업데이트
+        chart.options.scales.r.pointLabels.color = newColors.text;
+        chart.options.scales.r.ticks.color = newColors.text; // ✅ 틱(숫자) 색상 업데이트
+        chart.update();
+    });
+
+    // html 태그의 data-theme 속성 변화 감지
+    observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ["data-theme"]
     });
 }
 
-// 페이지 로딩이 끝난 뒤 실행 (trend.js가 먼저 실행된다는 가정)
-window.addEventListener("load", initInsightRadarCombined);
+window.addEventListener("load", initInsightRadar);
